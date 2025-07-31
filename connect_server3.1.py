@@ -1,11 +1,12 @@
 import paramiko
+import csv
 
 HOSTNAME = "5.189.154.248"
 PORT = 22
 USERNAME = "heri"
 PASSWORD = "Passwd093"
 
-
+# Koneksi ke server
 print(f"⏳Menyambungkan ke server SFTP: {HOSTNAME}:{PORT}...")
 ssh_client = paramiko.SSHClient()       # buat SSH Client
 ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -16,7 +17,8 @@ try:
 
     sftp_client = ssh_client.open_sftp()    # connect SFTP
     print("✅ Koneksi SFTP berhasil")
-
+    
+# Unduh File
     remote_path = 'uploads/sales_data.csv' # lokasi file
     file_path = './sales_data_download.csv'
     sftp_client.get(remote_path, file_path)
@@ -32,6 +34,7 @@ except Exception as e:
 
 print("---"*30)
 
+# Buka file dan tampilkan isinya per baris
 try:
     with open('sales_data_download.csv', 'r') as file:
         header = file.readline().strip().split(',')  # baca header
@@ -56,8 +59,7 @@ except Exception as e:
 
 print("---"*30)
 
-import csv
-
+# Buat file CSV baru
 input_file = 'sales_data_download.csv'
 output_file = 'luwi_sales_data_new.csv'
 
@@ -87,7 +89,7 @@ except Exception as e:
 
     print("---"*30)
     
-    # Upload file
+# Upload file
 try:
     remote_file = 'uploads/luwi_sales_data_new.csv' # lokasi file
     local_file = './luwi_sales_data_new.csv'
